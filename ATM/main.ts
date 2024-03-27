@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import inquirer from "inquirer";
 import chalk from "chalk";
 
@@ -82,7 +83,7 @@ async function Atm_start() {
         {
           name: "options",
           type: "list",
-          message: chalk.greenBright("Welcome Back " + chalk.bold.italic(login.login) + " Select From Blow Option: "),
+          message: chalk.greenBright("Welcome Back " + chalk.bold.italic(login.login) + " Select From Below Option: "),
           choices: ([
             "Funds Transfer",
             "Pay Utility Bills",
