@@ -1,93 +1,130 @@
-//importing inquirer
+#! /usr/bin/env node
+//---importing resources----
 import inquirer from "inquirer";
-//importing chalk
 import chalk from "chalk";
-//printing title
-console.log(`
----------------------------------------------------------------------------------
-\t\t\t` + chalk.bold.green(`Todo List`));
-//taking name of user
-let username = await inquirer.prompt([
+//---importing end here -----
+//------ assigning variables and interface ---------
+let todo_list = [];
+let Add_more_loop = true;
+//------ assigning variables and interface end here ---------
+//----- collecting username here ----------
+let userdata = await inquirer.prompt([
     {
         name: "name",
         type: "input",
-        message: "Enter your name: ",
+        message: chalk.yellow(`Enter Your name: `),
     },
 ]);
-//empty data where you have to add first task
-let empty_data = await inquirer.prompt([
-    {
-        name: "todo_list",
-        type: "input",
-        message: "your list is empty add some task: ",
-    },
-]);
-//Array must habe add task that will add new task
-let todo_list = ["Add Task", "Exit"];
-todo_list.push(empty_data.todo_list);
-//function it will for todo loop it will repeat task
-async function todo_loop() {
-    let todo_data = await inquirer.prompt([
+//----- collecting username end here ----------
+//---- title with name here -----
+console.log(chalk.bold.blueBright(`\n
+    -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+    \t  Welcome to The Apni Todo List
+    -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+    `));
+//---- title with name end here -----
+//------- while loop start to take task for todo list here --------
+while (Add_more_loop) {
+    let todo_Data = await inquirer.prompt([
         {
-            name: "todo_list",
+            name: "Todo_task",
+            type: "input",
+            message: chalk.yellow(`Enter Your Todo Task: `),
+            default: "empty",
+        },
+        {
+            name: "Add_more",
             type: "list",
-            message: chalk.bold.blueBright(`${username.name} Todo List:`),
-            choices: todo_list,
+            message: chalk.yellow(`Want to add more Todo Task: `),
+            choices: ["Yes", "No"], //asking user that want to add more data or not
+            default: "Yes",
         },
     ]);
-    //this will ask user to add more task
-    if (todo_data.todo_list === "Add Task") {
-        let add_data = await inquirer.prompt([
-            {
-                name: "new_data",
-                type: "input",
-                message: "Add New Task",
-            },
-        ]);
-        todo_list.push(add_data.new_data);
-        return todo_loop();
-    }
-    // this will exit program mean end program
-    else if (todo_data.todo_list === "Exit") {
-        console.log(`
-    ` + chalk.bold.green(`
-        .x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.
-        Thanks for use our system.
-        Follow me on:
-        Linkedin: https://www.linkedin.com/in/zaeem-uddin/
-        Github:   https://github.com/ZaeemUddinWork
-        .x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.
-    `) + `
----------------------------------------------------------------------------------
-    `);
-    }
-    //this will shirt program to to Confirmatiopn() if it is other than add task
-    else if (todo_data.todo_list !== "Add Task" && todo_data.todo_list !== "Exit") {
-        Confirmatiopn();
-    }
-    async function Confirmatiopn() {
-        let confirm = await inquirer.prompt([
-            {
-                name: "confirm",
-                type: "list",
-                message: `Does your task "${todo_data.todo_list}" completed ?`,
-                choices: ["Yes", "No"],
-            },
-        ]);
-        if (confirm.confirm === "Yes") {
-            let index = todo_list.indexOf(todo_data.todo_list);
-            //  let list_item = todo_data.todo_list;
-            //  todo_list = todo_list.splice(0, index, list_item);
-            let new_list = todo_list.filter((key, task) => task !== todo_data.todo_list);
-            todo_list = new_list;
-            return todo_loop();
-        }
-        else {
-            todo_loop();
-        }
-    }
+    let { Todo_task, Add_more } = todo_Data;
+    todo_list.push(Todo_task); //this will push to array
+    Add_more === "Yes" ? (Add_more_loop = true) : (Add_more_loop = false); // if user select yes than loop will continue other wise stop here
 }
-todo_loop();
-/*
- todo_list = todo_list.filter((key,task) => task !== todo_data.todo_list )
-     return todo_loop();*/
+//------- while loop start to take task for todo list end here --------
+//------ working for seleing option list -----------
+let questions;
+async function Select_list() {
+    questions = await inquirer.prompt([
+        {
+            //will ask user to select options
+            name: "show_option",
+            type: "list",
+            message: chalk.blueBright(`Select The option below: `),
+            choices: ["Show Todo List", "Edit Todo List", "Exit"],
+        },
+        {
+            //if user sect edit it will ask which item you want to edit
+            name: "Edit_List",
+            type: "list",
+            message: chalk.bold.blueBright(`Which Task you want to Edit ?`),
+            choices: todo_list,
+            when(questions) {
+                return questions.show_option == "Edit Todo List";
+            },
+        },
+    ]);
+    //----- condition start here -------
+    let { show_option, Edit_List } = questions;
+    if (show_option == "Show Todo List") {
+        console.log(chalk.bold.greenBright(`\n
+    .x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x. 
+    \t` +
+            chalk.red(`\t${userdata.name}'s Todo List`) +
+            `
+        `));
+        todo_list.forEach((list) => {
+            console.log(chalk.bold.greenBright(`\t> ${list}`));
+        });
+        console.log(chalk.bold.greenBright(`
+    .x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x. \n
+        `));
+        Select_list(); //after show todo list it will run select list function again
+    }
+    //if user select edit
+    else if (show_option === "Edit Todo List") {
+        //this will ask enter new edited task you want to add in list
+        let edit_task = await inquirer.prompt([
+            {
+                name: "edited",
+                type: "input",
+                message: chalk.bold.blue(`Enter a Task: `),
+            },
+        ]);
+        //working for replace select item with new item
+        let { edited } = edit_task;
+        let task = Edit_List;
+        let index = todo_list.indexOf(task);
+        todo_list[index] = edited;
+        console.log(chalk.green(`\n\n
+    ----------------------------------------------------------
+    !! ${userdata.name} your Todo list successfully Edited !!
+    ----------------------------------------------------------
+    \n
+    `));
+        Select_list(); //after edit it will run select list function again
+    }
+    //for exit
+    else {
+        credit();
+    }
+    //----- condition end here -------
+}
+//------ working for seleing option list end here -----------
+//calling function
+Select_list();
+//----
+//Credit will come if user select exit
+async function credit() {
+    console.log(chalk.bold.greenBright(`\n\n
+.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x. 
+!! Thanks ${userdata.name} for Play this Game !!
+            Follow me on:
+Linkedin: https://www.linkedin.com/in/zaeem-uddin/
+Github:   https://github.com/ZaeemUddinWork
+.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x. \n
+    `));
+}
