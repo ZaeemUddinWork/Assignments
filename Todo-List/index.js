@@ -121,10 +121,10 @@ Select_list();
 async function credit() {
     console.log(chalk.bold.greenBright(`\n\n
 .x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x. 
-!! Thanks ${userdata.name} for Play this Game !!
+!! Thanks ${userdata.name} for use this program !!
             Follow me on:
 Linkedin: https://www.linkedin.com/in/zaeem-uddin/
 Github:   https://github.com/ZaeemUddinWork
-.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x. \n
+.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x. \n\n
     `));
 }

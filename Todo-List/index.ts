@@ -158,7 +158,7 @@ async function credit() {
             Follow me on:
 Linkedin: https://www.linkedin.com/in/zaeem-uddin/
 Github:   https://github.com/ZaeemUddinWork
-.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x. \n
+.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x. \n\n
     `)
   );
 }
