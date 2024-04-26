@@ -34,7 +34,7 @@ function answer(){
         console.log(calculator.Number1 * calculator.Number2)//this will Multiply number1 and number2
     }
     else if(calculator.operator == 'Divide' ){
-        console.log(calculator.Number1 / calculator.Number2)//this will Divide number1 and number2
+        console.log(calculator.Number1 / calculator.Number2);//this will Divide number1 and number2
     }
     else
     {
